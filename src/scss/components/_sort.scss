@@ -2,6 +2,8 @@
 
 .sort {
   position: relative;
+  text-align: left;
+  min-width: 255px;
   &__label {
     display: flex;
     align-items: center;
