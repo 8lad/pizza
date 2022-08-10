@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
+import { useSelector } from "react-redux";
 import { nanoid } from "nanoid";
 import Sort from "../components/Sort";
 import Categories from "../components/Categories";
@@ -10,17 +11,15 @@ import SearchContext from "../context/Context";
 
 function Home() {
 
+    const { categoryId, sort } = useSelector(state => state.filters);
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [categoryId, setCategoryId] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [sortType, setSortType] = useState({ name: "популярности: возрастание", sortProperty: "rating" });
     const { searchValue } = useContext(SearchContext);
 
-
     useEffect(() => {
-        const orderSort = sortType.sortProperty.includes("-") ? "desc" : "asc";
-        const sortBy = sortType.sortProperty.replace("-", "");
+        const orderSort = sort.sortProperty.includes("-") ? "desc" : "asc";
+        const sortBy = sort.sortProperty.replace("-", "");
         const category = categoryId > 0 ? `category=${categoryId}&` : "";
         const searching = (!categoryId && searchValue) ? `&search=${searchValue}` : "";
         const queryString = `https://62daf28cd1d97b9e0c497c4d.mockapi.io/items?page=${currentPage}&limit=4&${category}sortBy=${sortBy}&order=${orderSort}${searching}`;
@@ -40,7 +39,7 @@ function Home() {
         };
         fetchData();
         window.scrollTo(0, 0);
-    }, [categoryId, sortType, searchValue, currentPage]);
+    }, [categoryId, sort, searchValue, currentPage]);
 
     const sceleton = [...new Array(10)].map(() => <Skeleton key={nanoid()} />);
     const pizzas = (!!items.length && items.map((item) => (<PizzaBlock key={item.id} {...item} />)));
@@ -48,8 +47,8 @@ function Home() {
     return (
         <div className="container">
             <div className="content__top">
-                <Categories value={categoryId} onClickCategory={setCategoryId} />
-                <Sort value={sortType} onChangeSort={setSortType} />
+                <Categories />
+                <Sort />
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__box">
