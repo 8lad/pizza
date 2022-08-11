@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import { nanoid } from "nanoid";
+import axios from "axios";
 import Sort from "../components/Sort";
 import Categories from "../components/Categories";
 import PizzaBlock from "../components/PizzaBlock";
@@ -11,10 +12,9 @@ import SearchContext from "../context/Context";
 
 function Home() {
 
-    const { categoryId, sort } = useSelector(state => state.filters);
+    const { categoryId, sort, currentPage } = useSelector(state => state.filters);
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
     const { searchValue } = useContext(SearchContext);
 
     useEffect(() => {
@@ -27,9 +27,9 @@ function Home() {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(queryString);
-                if (response.ok && response.status < 400) {
-                    const result = await response.json();
+                const response = await axios.get(queryString);
+                if (response.statusText === "OK" && response.status < 400) {
+                    const result = response.data;
                     setIsLoading(false);
                     setItems(result);
                 }
@@ -56,7 +56,7 @@ function Home() {
                     {isLoading ? sceleton : pizzas}
                 </div>
             </div>
-            <Pagination onChangePage={(number) => setCurrentPage(number)} />
+            <Pagination />
         </div>
     );
 }
