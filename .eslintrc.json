@@ -23,6 +23,7 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
+    "no-nested-ternary": "off",
     "no-param-reassign": [
       "error",
       {

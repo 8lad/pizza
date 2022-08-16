@@ -1,45 +1,64 @@
-import { useEffect, useState, useContext } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useContext, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { nanoid } from "nanoid";
-import axios from "axios";
+import qs from "qs";
+import { useNavigate } from "react-router-dom";
 import Sort from "../components/Sort";
 import Categories from "../components/Categories";
 import PizzaBlock from "../components/PizzaBlock";
 import { Skeleton } from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Paginaton";
 import SearchContext from "../context/Context";
+import { setFilters } from "../redux/slices/filterSlice";
+import { sortList } from "../utils/constants";
+import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 
 function Home() {
-
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const isSearch = useRef(false);
+    const isMounted = useRef(false);
     const { categoryId, sort, currentPage } = useSelector(state => state.filters);
-    const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { items, status } = useSelector(state => state.pizza);
     const { searchValue } = useContext(SearchContext);
 
     useEffect(() => {
-        const orderSort = sort.sortProperty.includes("-") ? "desc" : "asc";
-        const sortBy = sort.sortProperty.replace("-", "");
-        const category = categoryId > 0 ? `category=${categoryId}&` : "";
-        const searching = (!categoryId && searchValue) ? `&search=${searchValue}` : "";
-        const queryString = `https://62daf28cd1d97b9e0c497c4d.mockapi.io/items?page=${currentPage}&limit=4&${category}sortBy=${sortBy}&order=${orderSort}${searching}`;
-
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-                const response = await axios.get(queryString);
-                if (response.statusText === "OK" && response.status < 400) {
-                    const result = response.data;
-                    setIsLoading(false);
-                    setItems(result);
-                }
-            } catch (e) {
-                setIsLoading(false);
-            }
-        };
-        fetchData();
         window.scrollTo(0, 0);
-    }, [categoryId, sort, searchValue, currentPage]);
+        const getPizzas = () => {
+            const orderSort = sort.sortProperty.includes("-") ? "desc" : "asc";
+            const sortBy = sort.sortProperty.replace("-", "");
+            const category = categoryId > 0 ? `category=${categoryId}&` : "";
+            const searching = (!categoryId && searchValue) ? `&search=${searchValue}` : "";
+            const queryString = `https://62daf28cd1d97b9e0c497c4d.mockapi.io/items?page=${currentPage}&limit=4&${category}sortBy=${sortBy}&order=${orderSort}${searching}`;
+            dispatch(fetchPizzas(queryString));
+        };
+        if (!isSearch.current) {
+            getPizzas();
+        }
+        isSearch.current = false;
+    }, [categoryId, sort, searchValue, currentPage, dispatch]);
+
+    useEffect(() => {
+        if (window.location.search) {
+            const params = qs.parse(window.location.search.substring(1));
+            const sortOptions = sortList.find(obj => obj.sortProperty === params.sortProperty);
+            dispatch(setFilters({ ...params, sort: sortOptions }));
+            isSearch.current = true;
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isMounted.current) {
+            const queryString = qs.stringify({
+                sortProperty: sort.sortProperty,
+                categoryId,
+                currentPage
+            });
+            navigate(`?${queryString}`);
+        }
+        isMounted.current = true;
+    }, [categoryId, sort, currentPage, navigate]);
 
     const sceleton = [...new Array(10)].map(() => <Skeleton key={nanoid()} />);
     const pizzas = (!!items.length && items.map((item) => (<PizzaBlock key={item.id} {...item} />)));
@@ -52,9 +71,11 @@ function Home() {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__box">
-                <div className="content__items">
-                    {isLoading ? sceleton : pizzas}
-                </div>
+
+                {status === "error" ? <div className="content__error-info">
+                    <h2>К сожалению вышла ошибочка... 😕</h2>
+                    <p>Попробуйте перезагрузить страницу немного позже</p>
+                </div> : status === "loading" ? sceleton : <div className="content__items"> {pizzas} </div>}
             </div>
             <Pagination />
         </div>
