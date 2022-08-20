@@ -9,10 +9,10 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.11.49",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
     "axios": "^0.27.2",
     "lodash.debounce": "^4.0.8",
     "nanoid": "^4.0.0",
@@ -25,7 +25,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "spinners-react": "^1.0.7",
-    "typescript": "^4.4.2",
+    "typescript": "^4.7.4",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
@@ -34,7 +34,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
+    "@types/lodash.debounce": "^4.0.7",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^7.32.0 || ^8.2.0",
@@ -70,6 +72,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "prettier": "2.6.2",
     "sass": "^1.52.3",
-    "stylelint-config-prettier": "^9.0.3"
+    "stylelint-config-prettier": "^9.0.3",
+    "husky": "^7.0.0"
   }
 }

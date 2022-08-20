@@ -1,17 +1,16 @@
-import { useEffect, useContext, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { nanoid } from "nanoid";
 import qs from "qs";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sort from "../components/Sort";
 import Categories from "../components/Categories";
 import PizzaBlock from "../components/PizzaBlock";
-import { Skeleton } from "../components/PizzaBlock/Skeleton";
+import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Paginaton";
-import SearchContext from "../context/Context";
-import { setFilters } from "../redux/slices/filterSlice";
+import { setFilters, selectorFilter } from "../redux/slices/filterSlice";
 import { sortList } from "../utils/constants";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 
 
 function Home() {
@@ -19,9 +18,8 @@ function Home() {
     const navigate = useNavigate();
     const isSearch = useRef(false);
     const isMounted = useRef(false);
-    const { categoryId, sort, currentPage } = useSelector(state => state.filters);
-    const { items, status } = useSelector(state => state.pizza);
-    const { searchValue } = useContext(SearchContext);
+    const { categoryId, sort, currentPage, searchValue } = useSelector(selectorFilter);
+    const { items, status } = useSelector(selectPizzaData);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -61,7 +59,7 @@ function Home() {
     }, [categoryId, sort, currentPage, navigate]);
 
     const sceleton = [...new Array(10)].map(() => <Skeleton key={nanoid()} />);
-    const pizzas = (!!items.length && items.map((item) => (<PizzaBlock key={item.id} {...item} />)));
+    const pizzas = (!!items.length && items.map((item) => (<Link key={item.id} to={`/pizza/${item.id}`}><PizzaBlock {...item} /></Link>)));
 
     return (
         <div className="container">

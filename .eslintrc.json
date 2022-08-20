@@ -59,13 +59,15 @@
     "no-shadow": "off",
     "semi": "warn",
     "@typescript-eslint/semi": ["warn"],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react/prop-types": 0,
     "react/button-has-type": 0,
     "import/extensions": 0,
     "import/no-unresolved": 0,
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/no-noninteractive-element-interactions": 0,
-    "jsx-a11y/no-static-element-interactions": 0
+    "jsx-a11y/no-static-element-interactions": 0,
+    "react/function-component-definition": "off",
+    "no-underscore-dangle": "off"
   }
 }
