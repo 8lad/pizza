@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CartItem from "../components/CartItem";
-import { clearItems, selectCart } from "../redux/slices/cartSlice";
+import { CartItemType, clearItems, selectCart } from "../redux/slices/cartSlice";
 import CartEmpty from "../components/CartEmpty";
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector(selectCart);
-  const totalCount = items.reduce((sum: number, item: any) => item.count + sum, 0);
+  const totalCount = items.reduce((sum: number, item: CartItemType) => item.count! + sum, 0);
   const onClickClear = () => {
     // eslint-disable-next-line no-alert
     if (window.confirm("Do you really want to delete all pizzas?")) {
@@ -85,18 +85,16 @@ const Cart: React.FC = () => {
           </div>
         </div>
         <div className="content__items">
-          {items.map((item: any) => (
-            <CartItem key={item.id} {...item} />
+          {items.map((item: CartItemType) => (
+            <CartItem key={item.id} count={0} {...item} />
           ))}
         </div>
         <div className="cart__bottom">
           <div className="cart__bottom-details">
             <span>
-              {" "}
               Всего пицц: <b>{totalCount} шт.</b>{" "}
             </span>
             <span>
-              {" "}
               Сумма заказа: <b>{totalPrice} ₴</b>{" "}
             </span>
           </div>

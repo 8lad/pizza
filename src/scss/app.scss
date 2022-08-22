@@ -171,7 +171,10 @@ body {
     border-top: 1px solid $gray-line;
     padding-top: 30px;
     margin-top: 30px;
-
+    &-count-minus--disabled {
+      background-color: rgba(#787878, 0.4);
+      pointer-events: none;
+    }
     &-img {
       display: flex;
       align-items: center;

@@ -1,18 +1,18 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setSort, selectorSort } from "../../redux/slices/filterSlice";
-import { sortList, SortItem } from "../../utils/constants";
+import { setSort, selectorSort, SortType } from "../../redux/slices/filterSlice";
+import { sortList } from "../../utils/constants";
 
 type PopupClick = MouseEvent & {
   path: Node[];
 };
 
-function Sort() {
+const Sort: React.FC = memo(() => {
   const sort = useSelector(selectorSort);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const sortRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const changeActiveSort = (item: SortItem) => {
+  const changeActiveSort = (item: SortType) => {
     dispatch(setSort(item));
     setIsOpen(false);
   };
@@ -58,6 +58,6 @@ function Sort() {
       )}
     </div>
   );
-}
+});
 
 export default Sort;

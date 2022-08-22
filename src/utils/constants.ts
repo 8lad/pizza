@@ -1,9 +1,6 @@
-export type SortItem = {
-  name: string;
-  sortProperty: string;
-};
+import { SortType } from "../redux/slices/filterSlice";
 
-export const sortList: SortItem[] = [
+export const sortList: SortType[] = [
   { name: "популярности: возрастание", sortProperty: "rating" },
   { name: "популярности: убывание", sortProperty: "-rating" },
   { name: "цене: возрастание", sortProperty: "price" },
@@ -11,3 +8,5 @@ export const sortList: SortItem[] = [
   { name: "алфавиту: возрастание", sortProperty: "title" },
   { name: "алфавиту: убывание", sortProperty: "-title" },
 ];
+
+export const pizzaTypes = ["тонкое", "традиционное"];

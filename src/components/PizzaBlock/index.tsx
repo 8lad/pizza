@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { addItem, selectCartItemById } from "../../redux/slices/cartSlice";
+import { pizzaTypes } from "../../utils/constants";
 
 interface PizzaBlockProps {
   id: string;
@@ -14,27 +16,20 @@ interface PizzaBlockProps {
 const PizzaBlock: React.FC<PizzaBlockProps> = ({ id, title, price, imageUrl, sizes, types }) => {
   const [activeType, setActiveType] = useState<number>(0);
   const [activeSize, setActiveSize] = useState<number>(0);
-  const pizzaTypes = ["тонкое", "традиционное"];
+
   const dispatch = useDispatch();
   const cartItem = useSelector(selectCartItemById(id));
   const addedCount = cartItem ? cartItem.count : 0;
-
   const onClickAdd = () => {
-    const item = {
-      id,
-      title,
-      price,
-      imageUrl,
-      type: pizzaTypes[activeType],
-      size: sizes[activeSize],
-    };
-    dispatch(addItem(item));
+    dispatch(addItem({ id, title, price, imageUrl, size: sizes, type: types }));
   };
 
   return (
     <div className="pizza-block">
-      <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
-      <h4 className="pizza-block__title">{title}</h4>
+      <Link key={id} to={`/pizza/${id}`}>
+        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        <h4 className="pizza-block__title">{title}</h4>
+      </Link>
       <div className="pizza-block__selector">
         <ul>
           {types.length &&
@@ -63,7 +58,7 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({ id, title, price, imageUrl, siz
             />
           </svg>
           <span>Добавить</span>
-          {addedCount > 0 && <i>{addedCount}</i>}
+          {addedCount! > 0 && <i>{addedCount}</i>}
         </button>
       </div>
     </div>

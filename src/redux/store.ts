@@ -1,6 +1,7 @@
+/* eslint-disable import/no-cycle */
 import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 import { filters } from "./slices/filterSlice";
-// eslint-disable-next-line import/no-cycle
 import { cart } from "./slices/cartSlice";
 import { pizza } from "./slices/pizzaSlice";
 
@@ -13,3 +14,6 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();

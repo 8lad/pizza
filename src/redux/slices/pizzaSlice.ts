@@ -1,9 +1,13 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 // eslint-disable-next-line import/no-cycle
 import { RootState } from "../store";
 
-type StatusType = "loading" | "succeess" | "error";
+export enum Status {
+  LOADING = "loading",
+  SUCCESS = "success",
+  ERROR = "error",
+}
 
 type Pizza = {
   id: string;
@@ -17,16 +21,16 @@ type Pizza = {
 
 interface PizzaSliceState {
   items: Pizza[];
-  status: StatusType;
+  status: Status;
 }
 
 const initialState: PizzaSliceState = {
   items: [],
-  status: "loading",
+  status: Status.LOADING,
 };
 
-export const fetchPizzas = createAsyncThunk("pizza/fetchPizzasStatus", async (queryString: string) => {
-  const response = await axios.get(queryString);
+export const fetchPizzas = createAsyncThunk<Pizza[], string>("pizza/fetchPizzasStatus", async (queryString: string) => {
+  const response = await axios.get<Pizza[]>(queryString);
   return response.data;
 });
 
@@ -34,21 +38,21 @@ const pizzaSlice = createSlice({
   name: "pizza",
   initialState,
   reducers: {
-    setItems(state, action) {
+    setItems(state, action: PayloadAction<Pizza[]>) {
       state.items = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPizzas.pending, (state) => {
-      state.status = "loading";
+      state.status = Status.LOADING;
       state.items = [];
     });
     builder.addCase(fetchPizzas.fulfilled, (state, action) => {
       state.items = action.payload;
-      state.status = "succeess";
+      state.status = Status.SUCCESS;
     });
     builder.addCase(fetchPizzas.rejected, (state) => {
-      state.status = "error";
+      state.status = Status.ERROR;
       state.items = [];
     });
   },
