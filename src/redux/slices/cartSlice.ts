@@ -1,6 +1,7 @@
+/* eslint-disable import/no-cycle */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import calcTotalPrice from "../../utils/calcTotalPrice";
 import { getCartFromLS } from "../../utils/getCartFromLS";
-// eslint-disable-next-line import/no-cycle
 import { RootState } from "../store";
 
 export type CartItemType = {
@@ -18,9 +19,11 @@ interface CartSliceState {
   items: CartItemType[];
 }
 
+const { items, totalPrice } = getCartFromLS();
+
 const initialState: CartSliceState = {
-  items: getCartFromLS(),
-  totalPrice: 0,
+  items,
+  totalPrice,
 };
 
 const cartSlice = createSlice({
@@ -38,7 +41,7 @@ const cartSlice = createSlice({
           count: 1,
         });
       }
-      state.totalPrice = state.items.reduce((sum, item) => sum + item.price * (item.count ?? 1), 0);
+      state.totalPrice = calcTotalPrice(state.items);
     },
     minusItem(state, action: PayloadAction<string>) {
       const findItem = state.items.find((obj) => obj.id === action.payload);
@@ -52,6 +55,7 @@ const cartSlice = createSlice({
     clearItems(state) {
       state.items = [];
       state.totalPrice = 0;
+      localStorage.removeItem("cart");
     },
   },
 });
