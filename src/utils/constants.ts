@@ -1,4 +1,4 @@
-import { SortType } from "../redux/slices/filterSlice";
+import { SortType } from "../redux/filter/types";
 
 export const sortList: SortType[] = [
   { name: "популярности: возрастание", sortProperty: "rating" },

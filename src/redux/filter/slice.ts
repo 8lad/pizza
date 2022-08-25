@@ -1,20 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // eslint-disable-next-line import/no-cycle
-import { RootState } from "../store";
-
-export type SortPropertyType = "rating" | "title" | "price" | "-rating" | "-title" | "-price";
-
-export type SortType = {
-  name: string;
-  sortProperty: SortPropertyType;
-};
-
-export interface FilterSliceState {
-  searchValue: string;
-  categoryId: number;
-  currentPage: number;
-  sort: SortType;
-}
+import { FilterSliceState, SortType } from "./types";
 
 const initialState: FilterSliceState = {
   searchValue: "",
@@ -47,7 +33,5 @@ export const filtersSlice = createSlice({
   },
 });
 
-export const selectorSort = (state: RootState) => state.filters.sort;
-export const selectorFilter = (state: RootState) => state.filters;
 export const filters = filtersSlice.reducer;
 export const { setCategoryId, setSort, setCurrentPage, setFilters, setSearchValue } = filtersSlice.actions;

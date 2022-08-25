@@ -3,15 +3,14 @@ import { useSelector } from "react-redux";
 import { nanoid } from "nanoid";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-import Sort from "../components/Sort";
-import Categories from "../components/Categories";
-import PizzaBlock from "../components/PizzaBlock";
-import Skeleton from "../components/PizzaBlock/Skeleton";
-import Pagination from "../components/Paginaton";
-import { setFilters, selectorFilter, FilterSliceState } from "../redux/slices/filterSlice";
+import { Sort, Categories, PizzaBlock, Skeleton, Pagination } from "../components";
 import { sortList } from "../utils/constants";
-import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 import { useAppDispatch } from "../redux/store";
+import { selectorFilter } from "../redux/filter/selectors";
+import { selectPizzaData } from "../redux/pizza/selectors";
+import { fetchPizzas } from "../redux/pizza/asyncAction";
+import { FilterSliceState } from "../redux/filter/types";
+import { setFilters } from "../redux/filter/slice";
 
 function Home() {
   const dispatch = useAppDispatch();

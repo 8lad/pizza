@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import clsx from "clsx";
-import { addItem, minusItem, removeItem } from "../../redux/slices/cartSlice";
 import { pizzaTypes } from "../../utils/constants";
+import { addItem, minusItem, removeItem } from "../../redux/cart/slice";
 
 interface CartItemProps {
   id: string;
@@ -13,7 +13,7 @@ interface CartItemProps {
   size: number[];
 }
 
-const CartItem: React.FC<CartItemProps> = ({ id, title, price, count, imageUrl, type, size }) => {
+export const CartItem: React.FC<CartItemProps> = ({ id, title, price, count, imageUrl, type, size }) => {
   const dispatch = useDispatch();
   const onClickPlus = () => {
     dispatch(addItem({ id, title, price, count, imageUrl, type, size }));
@@ -100,5 +100,3 @@ const CartItem: React.FC<CartItemProps> = ({ id, title, price, count, imageUrl, 
     </div>
   );
 };
-
-export default CartItem;

@@ -1,12 +1,11 @@
 import { memo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { setCategoryId } from "../../redux/slices/filterSlice";
+import { setCategoryId } from "../../redux/filter/slice";
 import { RootState } from "../../redux/store";
 
 const categories: string[] = ["Все", "Мясные", "Вегетарианская", "Гриль", "Острые", "Закрытые"];
 
-const Categories: React.FC = memo(() => {
+export const Categories: React.FC = memo(() => {
   const { categoryId } = useSelector((state: RootState) => state.filters);
   const dispatch = useDispatch();
   const onChangeCategory = useCallback((index: number) => dispatch(setCategoryId(index)), [dispatch]);
@@ -24,5 +23,3 @@ const Categories: React.FC = memo(() => {
     </div>
   );
 });
-
-export default Categories;

@@ -1,12 +1,13 @@
+/* eslint-disable import/no-cycle */
 import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import logoSvg from "../../assets/img/pizza-logo.svg";
-// eslint-disable-next-line import/no-cycle
-import Search from "../Search";
-import { CartItemType, selectCart } from "../../redux/slices/cartSlice";
+import { Search } from "../index";
+import { selectCart } from "../../redux/cart/selectors";
+import { CartItemType } from "../../redux/cart/types";
 
-function Header() {
+export const Header: React.FC = () => {
   const location = useLocation();
   const { totalPrice, items } = useSelector(selectCart);
   const totalCount = items.reduce((sum: number, item: CartItemType) => item.count! + sum, 0);
@@ -68,6 +69,4 @@ function Header() {
       </div>
     </div>
   );
-}
-
-export default Header;
+};

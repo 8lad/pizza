@@ -1,5 +1,4 @@
-/* eslint-disable import/no-cycle */
-import { CartItemType } from "../redux/slices/cartSlice";
+import { CartItemType } from "../redux/cart/types";
 import calcTotalPrice from "./calcTotalPrice";
 
 export const getCartFromLS = () => {
